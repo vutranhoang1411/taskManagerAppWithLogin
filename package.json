@@ -1,0 +1,23 @@
+{
+  "name": "secret",
+  "version": "1.0.0",
+  "description": "",
+  "main": "client_side.js",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "axios": "^0.24.0",
+    "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.6",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.14.0",
+    "express": "^4.17.2",
+    "mongodb": "^4.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
