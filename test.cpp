@@ -16,4 +16,5 @@ public:
 };
 int main(){
     Circle m_circle{};
+    std::cout<<m_circle.getRadius();
 }
