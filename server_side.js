@@ -17,58 +17,48 @@ app.use(bodyParser.json());
 
 // API
 app.get('/secrets',(req,res)=>{
+    res.set('Content-Type', 'application/json');
     m_get1().then((result)=>{
-        res.set('Content-Type', 'application/json');
         res.send(JSON.stringify({
             acknowledge:true,
-            result:result
+            result:[...result]
         }))
     })
     .catch((error)=>{
         res.send(JSON.stringify({
-            acknowledge:false,
+            acknowledge:false
         }));
     })
 })
 app.get('/login',(req,res)=>{
+    res.set('Content-Type', 'application/json');
     m_get2(req.query).then((result)=>{
-        res.type('json');
         if (result){
-            result.acknowledge=true;
-            res.send(JSON.stringify(result));
+            res.send(JSON.stringify({
+                acknowledge:true,
+                result:{...result}
+            }))
         }
         else{
             res.send(JSON.stringify({acknowledge:false}));
         }
     }).catch((error)=>{
-        res.statusCode=404;
-        res.send(JSON.stringify({}));
+
+        res.send(JSON.stringify({acknowledge:false}));
     })
 })
 app.post('/register',(req,res)=>{
     m_post(req.body).then((result)=>{
         console.log(`Inserted object with id ${result.insertedId}`);
-        res.send(`Inserted object with id ${result.insertedId}`);
+        res.send(JSON.stringify({
+            result:`Inserted object with id ${result.insertedId}`,
+            acknowledge:true
+        }));
     }).catch((error)=>{
-        res.send(error);
+        res.send(JSON.stringify({acknowledge:false}));
     })
 })
-// app.delete('/articles',(req,res)=>{
-//     m_delete("").then((result)=>{
-//         res.send("deleted " + result.deletedCount + " item")
-//     }).catch((error)=>{
-//         res.send("something wrong")
-//     })
-// })
-// app.put('/articles/:custom',(req,res)=>{
-//     const query={name:req.params.custom};
-//     m_put(query,req.body).then((result)=>{
-//         res.send(`${result.matchedCount} document(s) matched the filter, modified ${result.modifiedCount} document(s)`);
-//     }).catch((error)=>{
-//         res.send(error);
-//     })
 
-// })
 app.patch('/submit/:custom',(req,res)=>{
     const filter={username:req.params.custom};
     const update={$push:{
@@ -80,13 +70,7 @@ app.patch('/submit/:custom',(req,res)=>{
         res.send(JSON.stringify({acknowledge:false}));
     })
 })
-// app.delete('/articles/:custom',(req,res)=>{
-//     m_delete(req.params.custom).then((result)=>{
-//         res.send("deleted " + result.deletedCount + " item")
-//     }).catch((error)=>{
-//         res.send("something wrong")
-//     })
-// })
+
 const m_get1=function(){
     return new Promise((res,rej)=>{
         let articles=[];
@@ -132,29 +116,7 @@ const m_get2 = function(query){
         })
     })
 }
-const m_delete=function(author_name){
-    return new Promise((res,rej)=>{
-        let query={};
-        if (author_name.length>0){
-            query.author=author_name;
-        }
-        mongoClient.connect().then((client)=>{
-            let db=client.db(dbName);
-            let collection=db.collection(collName);
-            collection.deleteMany(query).then((result)=>{
-                res(result);
-            }).catch((error)=>{
-                console.log(error);
-                rej("something wrong");
-            }).finally(()=>{
-                client.close();
-            })
-        }).catch((error)=>{
-            console.log(error);
-            rej("something wrong");
-        })
-    })
-}
+
 const m_post=function(data){
     return new Promise((res,rej)=>{
         mongoClient.connect().then((client)=>{
@@ -174,26 +136,7 @@ const m_post=function(data){
         })
     })
 }
-const m_put=function (query,update){
-    return new Promise((res,rej)=>{
-        mongoClient.connect().then((client)=>{
-            let db=client.db(dbName);
-            let collection=db.collection(collName);
-            collection.replaceOne(query,update).then((result)=>{
-                console.log(`${result.matchedCount} document(s) matched the filter, modified ${result.modifiedCount} document(s)`);
-                res(result);
-            }).catch((error)=>{
-                console.log(error);
-                rej(error);
-            }).finally(()=>{
-                client.close()
-            })
-        }).catch((error)=>{
-            console.log(error);
-            rej(error);
-        })
-    })
-}
+
 const m_patch=function(filter,update){
     return new Promise((res,rej)=>{
         mongoClient.connect().then((client)=>{

@@ -112,8 +112,14 @@ app.post('/register',userValidation(),(req,res)=>{
             bcrypt.hash(req.body.password,10).then((result)=>{
                 req.body.password=result;
                 axios.post('http://localhost:5000/register',req.body).then((response2)=>{
-                    console.log(response2.data);
-                    res.redirect('/login');
+                    if (response2.data.acknowledge===true) {
+                        console.log(response2.data.result);
+                        res.redirect('/login');
+                    }
+                    else{
+                        const conflictError="Something wrong, can register right now";
+                        res.render('register',{email:username,password:password,passwordConfirm:passwordConfirm,conflictError:conflictError});
+                    }
                 })
             })
         }
@@ -130,7 +136,7 @@ app.post('/login',(req,res)=>{
         //     res.redirect('/register');
         // }
         if (response.data.acknowledge===true){
-            bcrypt.compare(req.body.password,response.data.password).then((result)=>{
+            bcrypt.compare(req.body.password,response.data.result.password).then((result)=>{
                 if (result){
                     req.session.isAuth=true;
                     req.session.username=username;
