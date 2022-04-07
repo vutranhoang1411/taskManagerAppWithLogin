@@ -10,7 +10,7 @@ const {validationResult}=require('express-validator');
 //App init
 
 const app=express();
-app.set('view engine', 'ejs');
+
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
@@ -24,7 +24,7 @@ app.use(session({
 
 //Serving page
 app.get('/',loggedIn,(req,res)=>{
-    res.render('home');
+    res.render('./login/home');
 })
 app.get('/register',loggedIn,(req,res)=>{
     res.render('register');
@@ -111,7 +111,11 @@ app.post('/register',userValidation(),(req,res)=>{
         else{
             bcrypt.hash(req.body.password,10).then((result)=>{
                 req.body.password=result;
-                axios.post('http://localhost:5000/register',req.body).then((response2)=>{
+                const data={
+                    username:req.body.username,
+                    password:req.body.password
+                }
+                axios.post('http://localhost:5000/register',data).then((response2)=>{
                     if (response2.data.acknowledge===true) {
                         console.log(response2.data.result);
                         res.redirect('/login');

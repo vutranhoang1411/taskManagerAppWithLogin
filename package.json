@@ -4,21 +4,19 @@
   "description": "",
   "main": "client_side.js",
   "dependencies": {
-    "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "express-validator": "^6.14.0",
-    "mongodb": "^4.2.2",
-    "typescript": "^4.5.4"
+    "mongoose": "^6.2.10"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+    "start": "nodemon app.js"
+  }
 }
