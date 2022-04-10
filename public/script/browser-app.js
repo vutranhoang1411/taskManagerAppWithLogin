@@ -1,5 +1,5 @@
 const tasksDOM = document.querySelector('.tasks')
-const loadingDOM = document.querySelector('.loading-text')
+// const loadingDOM = document.querySelector('.loading-text')
 const formDOM = document.querySelector('.task-form')
 const taskInputDOM = document.querySelector('.task-input')
 const formAlertDOM = document.querySelector('.form-alert')
@@ -51,7 +51,6 @@ const formAlertDOM = document.querySelector('.form-alert')
 tasksDOM.addEventListener('click', async (e) => {
   const el = e.target
   if (el.parentElement.classList.contains('delete-btn')) {
-    loadingDOM.style.visibility = 'visible'
     const id = el.parentElement.dataset.id
     try {
       await axios.delete(`/tasks/${id}`)
@@ -60,7 +59,6 @@ tasksDOM.addEventListener('click', async (e) => {
       console.log(error)
     }
   }
-  loadingDOM.style.visibility = 'hidden'
 })
 
 // form

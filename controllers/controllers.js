@@ -136,6 +136,19 @@ const postOneTask = async (req,res,next)=>{
     }
 }
 const deleteTask = async(req,res,next)=>{
-    
+    const {username} = req.session;
+    const taskID = req.params.id;
+    try{
+        await userModel.updateOne(
+            {username:username},
+            {$pull:{
+                task:{_id:taskID}
+            }}
+        )
+        res.status(200).json({});
+
+    }catch(error){
+        console.log(error);
+    }
 }
-module.exports={getHomePage,getRegister,getLogin,userRegister,userLogin,getTasks,postTasks,getOneTask,postOneTask};
+module.exports={getHomePage,getRegister,getLogin,userRegister,userLogin,getTasks,postTasks,getOneTask,postOneTask,deleteTask};
